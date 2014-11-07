@@ -1,0 +1,128 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{natbib}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{comment}
+
+\oddsidemargin 0cm
+\evensidemargin 0cm
+
+\usepackage[margin=1in]{geometry}
+
+\parindent 0cm
+\parskip 0.5cm
+
+\usepackage{fancyhdr}
+\pagestyle{plain}
+%\fancyhf{}
+%\fancyhead[L]{AOSS Reference Sheet}
+%\fancyhead[CH]{test}
+\fancyfoot[C]{Page \thepage}
+
+\newcommand{\vb}{\mathbf}
+\newcommand{\diff}[2]{\frac{d #1}{d #2}}
+\newcommand{\diffsq}[2]{\frac{d^2 #1}{{d #2}^2}}
+\newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pdiffsq}[2]{\frac{\partial^2 #1}{{\partial #2}^2}}
+\newcommand{\topic}{\textbf}
+\newcommand{\arcsinh}{\mathrm{arcsinh}}
+\newcommand{\arccosh}{\mathrm{arccosh}}
+\newcommand{\arctanh}{\mathrm{arctanh}}
+
+\begin{document}
+
+\appendix
+
+\setcounter{section}{5}
+
+\section{Biographical Sketch: Dr. Paul Ullrich (PI)}
+
+\vspace{-0.5cm}
+\begin{center}
+\textbf{Ph:} (530) 400 9817, \textbf{Email:} \url{paullrich@ucdavis.edu}, \textbf{Web:} \url{http://climate.ucdavis.edu}
+\end{center}
+
+\vspace{-0.8cm}
+\paragraph{\large (a) Professional Preparation}\ \\ \ \\
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}lll}
+University of Waterloo (Canada) & Applied Mathematics & B.Math 2005 \\
+& \qquad and Computer Science & \\
+University of Waterloo (Canada) & Applied Mathematics & M.Math 2007 \\
+University of Michigan (Ann Arbor, USA) & Atmospheric Science & Ph.D. 2011 \\
+& \qquad and Scientific Computing & \\
+University of Michigan (Ann Arbor, USA) & Atmospheric Science & Postdoc 2011-2012 \\
+& \qquad and Scientific Computing & \\
+\end{tabular*}
+
+\vspace{-0.5cm}
+\paragraph{\large (b) Appointments and Professional Experience}\ \\ \ \\
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ll}
+09/12 - Present: & Assistant Professor, Regional and Global Climate Modeling, \\
+& \qquad University of California Davis \\
+05/11 - 08/12: & Postdoctoral Researcher / Adjunct Lecturer, \\
+& \qquad University of Michigan, Ann Arbor, MI \\
+09/04 - 12/04: & Mathematics Developer, Maplesoft Inc., Waterloo, Canada \\
+01/04 - 04/04: & Senior Software Engineer, RapidLabs Microsystems, Waterloo, Canada \\
+01/01 - 08/02: & Software Engineer, Sonic Foundry Canada, Waterloo, Canada
+\end{tabular*}
+
+\vspace{-0.3cm}
+\paragraph{\large (c) Products}\ \\
+\vspace{-0.8cm}
+\begin{itemize}
+\item \textbf{Ullrich, P.A.}, C. Jablonowski and P.H. Lauritzen (2013) ``A high-order fully explicit `incremental-remap'-based semi-Lagrangian shallow-water model.'' Int. J. Numer. Meth. Fluids. In press.
+
+\item \textbf{Ullrich, P.A.} (2013) ``Understanding the treatment of waves in atmospheric models, Part I: The shortest resolved waves of the 1D linearized shallow water equations.'' Quart. J. Roy. Meteor. Soc. DOI: 10.1002/qj.2226. 
+
+\item \textbf{Ullrich, P.A.} and M.R. Norman (2013) ``The conservative Flux-Form Semi-Lagrangian Spectral Element (FF-SLSE) method for tracer transport.'' Quart. J. Roy. Meteor. Soc. DOI: 10.1002/qj.2184
+
+\item \textbf{Ullrich, P.A.} and C. Jablonowski (2012) {``MCore: A non-hydrostatic atmospheric dynamical core utilizing high-order finite-volume methods.''}  J. Comput. Phys., Vol. 231, 5078Ð-5108. DOI: 10.1016/j.jcp.2012.04.024.
+
+\item \textbf{Ullrich, P.A.} and C. Jablonowski (2011) {``Operator-Split Runge-Kutta-Rosenbrock (RKR) Methods for Nonhydrostatic Atmospheric Models.''} Mon. Wea. Rev., Volume 140, Number 4, pp. 1257-1284, DOI: 10.1175/MWR-D-10-05073.1. 
+
+\item \textbf{Ullrich, P.A.} and C. Jablonowski (2011) {``Implicit-Explicit Runge-Kutta-Rosenbrock (IMEX-RKR) schemes for nonhydrostatic atmospheric models.''}  Mon. Weather Rev., Vol. 140, 1257--1284.  DOI: 10.1175/MWR-D-10-05073.1.
+
+\item \textbf{Ullrich, P.A.} and C. Jablonowski (2011) {``An analysis of finite-volume methods for smooth problems on refined grids.''} J. Comput. Phys., Vol. 230, 706--725, DOI: 10.1016/j.jcp.2010.10.014.
+
+\item \textbf{Ullrich, P.A.}, P.H. Lauritzen and C. Jablonowski (2012) {``Some considerations for high-order `incremental remap'-based transport schemes: edges, reconstructions and area integration.''}  Int. J. Numer. Meth. Fluids.  DOI: 10.1002/fld.3703.
+
+\item Lauritzen, P.H., \textbf{P.A. Ullrich} and R.D. Nair (2011) ``Atmospheric transport schemes: Desirable properties and a semi-Lagrangian view on finite-volume discretizations.'' In Numerical Techniques for Global Atmospheric Models, Springer-Verlag: Heidelberg, pp. 185--250.
+
+\item \textbf{Ullrich, P.A.}, C. Jablonowski and B. van Leer (2010) {``High-order finite-volume models for the shallow-water equations on the sphere.''}  J. Comput. Phys., Vol. 229, 6104--6134, DOI: 10.1016/j.jcp.2010.04.044.
+\end{itemize}
+
+\vspace{-0.5cm}
+\paragraph{\large (d) Synergistic Activities}\ \\
+\vspace{-0.8cm}
+\begin{itemize}
+\item Associate Editor of the AMS journal Monthly Weather Review (MWR).  Reviewer for Journal of Computational Physics (JCP), Communications in Computational Physics (CiCP), SIAM Journal on Scientific Computing (SISC), Quarterly Journal of the Royal Meteorological Society (QJRMS), Journal of Advances in Modeling Earth Systems (JAMES), International Journal of Numerical Methods in Fluids (IJNMF) and Geoscientific Model Development (GMD).
+\item Lead co-organizer of the Dynamical Core Model Intercomparison Project (DCMIP).  Also lead co-organizer and invited lecturer of the DCMIP 2012 summer school held at NCAR.  Lead designer of the DCMIP 2012 test case suite for dynamical core inter comparison.
+\item Co-organizer of the Partial Differential Equations (PDEs) on the Sphere conference (2014, Boulder, CO).  Co-organizer of  ``Traversing New Terrain in Meteorological Modeling, Air Quality and Dispersion'' (2013, Davis, CA). Session organizer at 2012 and 2013 AGU Fall Meeting and 2013 SIAM Computer Science and Engineering (CS\&E) conference.
+\item Lead developer of the Tempest finite-element Earth-system modeling framework.  Co-developer of the Chombo/MCore finite-volume dynamical core (at Lawrence Berkeley National Lab).
+\item Developer of comprehensive course notes for mixed undergraduate / graduate courses ``Introduction to Scientific Computing'' and ``Numerical Methods for Partial Differential Equations.''
+\end{itemize}
+
+\vspace{-0.5cm}
+\paragraph{\large (e) Collaborators and Other Affiliations}\ \\
+
+\vspace{-0.5cm}
+\ \ Christiane Jablonowski (University of Michigan, Graduate Advisor, Postdoctoral Sponsor)
+
+\noindent
+\begin{tabular}{p{3.25in}p{3.25in}}
+Phillip Colella (LBNL) & Ram D. Nair (NCAR) \\
+Hans Johansen (LBNL) & Matthew Norman (Oak Ridge National Lab) \\
+Smadar Karni (University of Michigan) & Kevin Reed (American Geophysical Union) \\
+James Kent (University of Michigan) & Andrew Staniforth (UK Met Office) \\
+Peter Lauritzen (NCAR) & Mark Taylor (Sandia National Laboratories) \\
+Peter McCorquodale (LBNL) & Bram van Leer (University of Michigan) \\
+Thomas Melvin (UK Met Office) & Michael Wehner (LBNL) \\
+\end{tabular}
+
+\end{document}

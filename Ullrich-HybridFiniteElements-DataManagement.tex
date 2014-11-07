@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{natbib}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{comment}
+
+\oddsidemargin 0cm
+\evensidemargin 0cm
+
+\usepackage[margin=1in]{geometry}
+
+\parindent 0cm
+\parskip 0.5cm
+
+\usepackage{fancyhdr}
+\pagestyle{plain}
+%\fancyhf{}
+%\fancyhead[L]{AOSS Reference Sheet}
+%\fancyhead[CH]{test}
+\fancyfoot[C]{Page \thepage}
+
+\newcommand{\vb}{\mathbf}
+\newcommand{\diff}[2]{\frac{d #1}{d #2}}
+\newcommand{\diffsq}[2]{\frac{d^2 #1}{{d #2}^2}}
+\newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pdiffsq}[2]{\frac{\partial^2 #1}{{\partial #2}^2}}
+\newcommand{\topic}{\textbf}
+\newcommand{\arcsinh}{\mathrm{arcsinh}}
+\newcommand{\arccosh}{\mathrm{arccosh}}
+\newcommand{\arctanh}{\mathrm{arctanh}}
+
+\begin{document}
+
+\appendix
+
+\setcounter{section}{9}
+
+\section{Data Management Plan}
+
+The sum total of the research conducted under this grant application will be linked from the Climate and Global Change Group at UC Davis, available online at \url{http://climate.ucdavis.edu}.
+
+\paragraph{Software:}  The software produced in conjunction with this project will be part of the Tempest codebase.  This codebase is released under the Lesser GNU Public License (LGPL), which allows largely unrestricted access to the source code.  Members of the public will have unrestricted access to this codebase via the collaborative software hosting service GitHub (\url{https://github.com/paullric/tempestmodel}).  Automatic documentation of the source code will be provided via DOxyGen.  Implementation details will be described in the Tempest implementation document, which is freely distributed along with the source code and so not subject to journal paywalls.
+
+\paragraph{Long term archiving of data:}  All public data will be deposited in Merritt, a repository service from the University of California Curation Center (UC3) that has capabilities to manage, archive and share digital content. Merritt allows access to the public via persistent URLs, provides tools for long-term data management, and permits permanent storage options. Merritt has built-in contingencies for disaster recovery including redundancy and recovery plans.
+
+\paragraph{Intercomparison data:}  As the model is tested certain model simulations which are relevant to the Dynamical Core Model Intercomparison Project (DCMIP) may be stored for intercomparison.  This data will be made available on the Earth System Grid (\url{http://earthsystemcog.org/}).
+
+\end{document}
