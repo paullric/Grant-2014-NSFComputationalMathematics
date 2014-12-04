@@ -1,0 +1,62 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{natbib}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{setspace}
+
+\oddsidemargin 0cm
+\evensidemargin 0cm
+
+\usepackage[margin=1in]{geometry}
+
+\parindent 0cm
+\parskip 0.5cm
+
+\usepackage{fancyhdr}
+\pagestyle{plain}
+%\fancyhf{}
+%\fancyhead[L]{AOSS Reference Sheet}
+%\fancyhead[CH]{test}
+\fancyfoot[C]{Page \thepage}
+
+\newcommand{\vb}{\mathbf}
+\newcommand{\diff}[2]{\frac{d #1}{d #2}}
+\newcommand{\diffsq}[2]{\frac{d^2 #1}{{d #2}^2}}
+\newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pdiffsq}[2]{\frac{\partial^2 #1}{{\partial #2}^2}}
+\newcommand{\topic}{\textbf}
+\newcommand{\arcsinh}{\mathrm{arcsinh}}
+\newcommand{\arccosh}{\mathrm{arccosh}}
+\newcommand{\arctanh}{\mathrm{arctanh}}
+
+\begin{document}
+
+\appendix
+
+\addtocounter{section}{1}
+
+\section{Project Summary}
+\vspace{-0.2cm}
+
+The next century is expected to see unprecedented changes to the climate system with extensive socioeconomic repercussions.  In the absence of an experimental test bed for global climate, global atmospheric modeling systems have been built to provide insight into potential future change in the climate system.  However, restrictions on computational cost have inherently limited the finest resolution of our uniform-resolution global atmospheric models to 50-100 kilometers, far beyond the scale necessary for informing local and regional policymakers.  Dynamically downscaled models which use global climate model data for boundary conditions are also known to suffer from spurious noise and do not provide two-way coupling between regional and global scales.  Consequently, there is a pressing need to develop a next generation of global atmospheric modeling systems that can properly address questions on these scales.
+
+This proposal aims to develop a new robust and accurate general circulation model that is scalable on large-scale parallel systems, remains valid at all grid resolutions, supports both static and adaptive mesh refinement, and improves on existing treatments of topography.  To support this goal, this proposal will focus on developing a Staggered Nodal Finite Element Method (SNFEM) which incorporates the scalability and high-order accuracy of finite element methods with the improved treatment of wave-like motion associated with staggered methods.  Validity across grid resolutions will be achieved by discretizing the non-hydrostatic equations for atmospheric motion using a suite of implicit-explicit Runge-Kutta methods for coupling a horizontally explicit and vertically implicit discretizations.  Improvements to existing treatments of topography will use of high-order accuracy to eliminate errors in horizontal pressure gradient calculation and the development of a new viscous operator that does not introduce spurious diffusion near sharp topographic gradients.
+
+\vspace{-0.5cm}
+\subsection*{Intellectual Merit}
+\vspace{-0.5cm}
+
+The issues addressed in this proposal are key for pushing atmospheric models to the resolutions needed to answer pertinent questions about climate change on the regional scale.  With an improved treatment of fine-scale motions, scalability to large scale parallel systems, improvements in topographic representation and support for mesh refinement, this work is potentially transformative on the way that atmospheric models are constructed.  Further, the numerical methods developed as part of this research have the potential for being applied to many important problems in computational fluid dynamics, ranging from aerospace to computational biology.
+
+\vspace{-0.5cm}
+\subsection*{Broader Impacts}
+\vspace{-0.5cm}
+
+The goal of this project is to improve the state-of-the-art for global climate prediction and weather forecasting by tackling a number of outstanding problems with these models.  This work has substantial societal impact ranging from weather forecasting, water resource management, agricultural planning and urban development.  The improved treatment of topography addressed by this proposal will make climate models more applicable to mountainous regions and will provide a test bed for the development of non-hydrostatic and multi-resolution parameterizations of sub-grid-scale processes.  This project will build an interdisciplinary partnership between atmospheric science and computational science by a mutual exchange of expertise.  This research will also be a driver for the 2016 Dynamical Core Model Intercomparison Project (DCMIP) workshop, which will address the topic of multi-resolution modeling.
+
+\end{document}
