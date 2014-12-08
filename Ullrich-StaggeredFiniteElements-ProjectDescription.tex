@@ -199,11 +199,17 @@ The non-hydrostatic equations that govern atmospheric circulation have been know
 \caption{Four options for the placement of scalar ($\times$) and velocity variables (arrows): (a) nodal discontinuous Galerkin, (b) nodal Spectral Element, (c) C-grid SNFEM, (d) B-grid SNFEM..} \label{fig:NodalArrangement}
 \end{figure}
 
-Staggered methods are a class of discretizations where scalar (density, pressure and tracer density) and velocity degrees of freedom are stored at different spatial locations \cite{AAVRL1977GCM}.  These methods have long been used for both horizontal discretizations in atmospheric models \citep{SJL2004MWR, WMPSJL2009NMSPF, SWCKJBDJetal2001, WCSJBKMGDLDFSHPTDR2012MWR} {\color{red}(Lin and Rood, Skamarock, Thuburn)} and vertical discretizations \cite{AASM1988JAS, JGCNAP1953JAS} {\color{red}Lorenz, Charney-Phillips}.  Their adoption is motived by their excellent dispersive properties and do not support stationary (zero phase speed) $2 \Delta x$ modes \cite{DAR1994MWR, JTTJW2005JCP} {\color{red}(Randall, Thuburn and Woollings, Ullrich 2013)}.  However, these methods have never been operationally employed above second-order accuracy.  Alongside the rise of finite element methods for atmospheric modeling, there has been a renewed interest in pursuing staggered finite element methods \citep{DBLG2009CS, CJCJS2012JCP} {\color{red}(Cotter, Melvin, Thuburn)} analogous to the mixed-finite element methods employed for elliptic problems \cite{PRJT1977MAFEM}.
+{\color{blue} Staggered here is not to be confused with Kopriva and Kolias' definition of staggering, which staggers flux nodes relative to solution unknowns.}
 
-This proposal explores staggered nodal finite element methods (SNFEM), which are an extension of nodal finite element methods that store scalar and velocity degrees of freedom at nodal points.  SNFEM are formulated using differential operators on Gauss-Legendre (GL) and Gauss-Lobatto-Legendre (GLL) nodes analogous to the flux reconstruction methods of \cite{HTH2007AIAA}, as described in {\color{red}(Ullrich 2014)}.  An example nodal staggering for a 3rd order 1D hybrid SE/DG method is depicted in Figure \ref{fig:SEStaggered}.  Four possible arrangements of prognostic variables are depicted in Figure \ref{fig:NodalArrangement} for a 2D SNFEM.  Continuity is optionally enforced via direct stiffness summation {\color{red}(Ref?)}.  Several stabilization mechanisms will be studied as part of this proposal, including hyper viscosity \citep{OGMNLJROMATPAU2013} {\color{red}(Ullrich 2014)}, {\color{blue} And Others}.
+Staggered methods, as defined in this proposal, are a class of discretizations where scalar (density, pressure and tracer density) and velocity degrees of freedom are stored at different spatial locations \cite{AAVRL1977GCM}.  These methods have long been used for both horizontal discretizations in atmospheric models \citep{SJL2004MWR, WMPSJL2009NMSPF, SWCKJBDJetal2001, WCSJBKMGDLDFSHPTDR2012MWR} {\color{red}(Lin and Rood, Skamarock, Thuburn)} and vertical discretizations \cite{AASM1988JAS, JGCNAP1953JAS} {\color{red}Lorenz, Charney-Phillips}.  These methods have excellent dispersive properties and do not support stationary (zero phase speed) $2 \Delta x$ modes \cite{DAR1994MWR, JTTJW2005JCP} {\color{red}(Randall, Thuburn and Woollings, Ullrich 2013)}, which are notorious for polluting atmospheric models.  However, these methods have never been operationally employed above second-order accuracy.  Alongside the rise of finite element methods for atmospheric modeling, there has been a renewed interest in pursuing staggered finite element methods \citep{DBLG2009CS, CJCJS2012JCP} {\color{red}(Cotter, Melvin, Thuburn)} analogous to the mixed-finite element methods employed for elliptic problems \cite{PRJT1977MAFEM}.
+
+This proposal explores staggered nodal finite element methods (SNFEM), which are an extension of nodal finite element methods that store scalar and velocity degrees of freedom at nodal points.  SNFEM are formulated using differential operators on Gauss-Legendre (GL) and Gauss-Lobatto-Legendre (GLL) nodes analogous to the flux reconstruction methods of \cite{HTH2007AIAA}, as described in {\color{red}(Ullrich 2014)}.  An example nodal staggering for a 3rd order 1D hybrid SE/DG method is depicted in Figure \ref{fig:SEStaggered}.  Four possible arrangements of prognostic variables are depicted in Figure \ref{fig:NodalArrangement} for a 2D SNFEM.  
+
+Under this formulation, a \textit{continuous extension} of the nodal discretization is constructed via polynomial fit through all nodal points associated with a particular variable within an element (either GL nodes or GLL nodes).  Derivatives of the polynomial fits are then used for computing the spatial discretization (at either GL or GLL nodes), augmented (when a discontinuity exists in the reconstruction at element edges) by the derivative operator that arises from  the flux reconstruction formulation.  Continuity is optionally enforced via direct stiffness summation {\color{red}(Ref?)}.
 
 In the absence of explicit stabilization, SNFEM can be shown to greatly outperform competing methods at the same order of accuracy (see Table \ref{tab:ShortestResolvedWave} and \cite{PAU2013QJRMS}). {\color{blue} More?}
+
+This differential treatment can be shown to be identical to a corresponding \textit{variational} or \textit{Galerkin} treatment with appropriate choice of flux correction function.  Several stabilization mechanisms will be studied as part of this proposal, including hyperviscosity \citep{OGMNLJROMATPAU2013} {\color{red}(Ullrich 2014)}, {\color{blue} And Others}.
 
 %\subsubsection{Justification of Hypotheses}
 
@@ -264,9 +270,17 @@ Once model development is complete, verification must be performed to ensure con
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=5in]{HFEM_ThirdOrder}
+\includegraphics[width=4in]{PhaseErrors}
 \end{center}
-\caption{A dispersion analysis of the right-going mode of the 1D third-order staggered nodal finite element method depicting normalized phase speed as a function of dimensionless wavenumber.  The solid line denotes the exact phase speed, normalized to $1$.  The dotted blue curve depicts the SNFEM phase speed, the dashed line depicts the phase speed of a standard staggered second-order scheme and the red crosses ($\times$) depict the phase speed of the third-order SE method.  Note that since the SE method is unstaggered, the phase speed must go to zero at $k \Delta x = \pi$.  Both SNFEM and SE have the same number of degrees of freedom per element, but SNFEM boasts the best long-wavelength ($k < \pi/2$) and short-wavelength ($k > \pi/2$) properties.  The presence of the spectral gap at $k \Delta x = \pi / 2$ will be addressed in this work.} \label{fig:SNFEMEigenstructure}
+\caption{An analysis of phase speed errors of the right-going mode for three discretizations of the 1D wave equation (3rd order SNFEM, 3rd order spectral element and 2nd order staggered FV) as a function of horizontal wavelength.  The unstaggered spectral element method exhibits $100\%$ error for $2 \Delta x$ modes, corresponding to zero phase speed.  Observe that although SNFEM and SE have the same number of degrees of freedom per element, SNFEM boasts the best long-wavelength ($> 4 \Delta x$) and short-wavelength ($< 4 \Delta x$) properties.  The presence of the spectral gap at $4 \Delta x$ will be addressed in this work.} \label{fig:SNFEMEigenstructure}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=3in]{SimulatedBell_SE}
+\includegraphics[width=3in]{SimulatedBell_SNFEM}
+\end{center}
+\caption{A sharp Gaussian bell of height $1$ is simulated for $0.4$ seconds under the 1D wave equation using (a) the fourth-order spectral element method and (b) a fourth-order SNFEM formulation.  Initial conditions are shown with red dashed line.  Although both schemes are energy conservative, the improved phase properties of SNFEM reduce short-wavelength noise in the solution and more closely capture the height of the bell (exact maximum $0.5$).}  \label{fig:SimulatedBell}
 \end{figure}
 
 %To a close approximation, the atmosphere is in a state of geostrophic and hydrostatic balance.  The dynamic character of the atmosphere is governed by a slow adjustment process which gives rise to wave motion over all scales.  Accurate treatment of these waves is important to capture departures from geostrophic balance, and to ensure that the adjustment process is correct and free from spurious numerical errors.  As shown by \cite{PHLCJMATRDN2010JAMES}, an accurate treatment of the equations of motion is also important to avoid errors due to grid imprinting.
@@ -275,10 +289,9 @@ The capability of a numerical method to capture wave-like motion in atmospheric 
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=3.2in]{SE_UnmodifiedDispersion}
-\includegraphics[width=3.2in]{SE_ModifiedDispersion}
+\includegraphics[width=6.5in]{ModifiedBasisMethod}
 \end{center}
-\caption{(a) Dispersion relation for the unmodified SE method of order 5 showing a spectral gap and (b) Dispersion relation for the SE method using a modified basis where the spectral gap has been removed.  The solid line depicts the exact phase speed.} \label{fig:SEMDispersionGap}
+\caption{(a) Dispersion relation for the unmodified SE method of order 5 showing a spectral gap and (b) Dispersion relation for the SE method using a modified basis where the spectral gap has been removed.  The exact phase speed is $c_p = 1$.} \label{fig:SEMDispersionGap}
 \end{figure}
 
 \begin{itemize}
