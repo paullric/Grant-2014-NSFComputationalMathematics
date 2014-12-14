@@ -92,7 +92,7 @@ These hypotheses and proposal goals will be addressed via a structured set of re
 \vspace{-0.4cm}
 The focus of this proposal on the development, analysis and implementation of new numerical methods fits well within the scope of NSF Computational Mathematics, which supports ``mathematical research in areas of science where computation plays a central and essential role, emphasizing design, analysis, and implementation of numerical methods and algorithms, and symbolic methods.''  A further strength of this proposal is its interdisciplinary character, bridging atmospheric science (represented by PI Ullrich) and computational mathematics (represented by co-PI Persson).  The numerical methods developed under this project will further have interdisciplinary application, and will be useful to disciplines such as acoustics, aerospace, astrophysics and oceanography.
 
-The remainder of this proposal is as follows:  Broader impacts and intellectual merit are described in section \ref{sec:BroaderImpacts}.  The background, motivation and problem statement is provided in section \ref{sec:BackgroundMotivation}, followed by the proposed strategy in section \ref{sec:ProposedStrategy}.  The details of the research plan is found in section \ref{sec:Research} and the research plan and timeline in section \ref{sec:ResearchPlan}.
+The remainder of this proposal is as follows:  Broader impacts and intellectual merit are described in section \ref{sec:BroaderImpacts}.  The background, motivation and problem statement is provided in section \ref{sec:BackgroundMotivation}, followed by the proposed strategy in section \ref{sec:ProposedStrategy}.  The detailed research tasks  is found in section \ref{sec:Research} and the research plan and timeline in section \ref{sec:ResearchPlan}.
 
 \subsection{Broader Impacts and Intellectual Merit} \label{sec:BroaderImpacts}
 
@@ -111,7 +111,7 @@ This project will further tie into the Dynamical Core Model Intercomparison Proj
 
 \subsection{Background and Motivation} \label{sec:BackgroundMotivation}
 
-\subsubsection{The need for an accurate treatment of wave-like motion} \label{sec:Waves}
+\subsubsection{The need for an accurate treatment of wave-like motion} \label{sec:AccurateWaves}
 
 To a close approximation, the global atmosphere is in a state of geostrophic and hydrostatic balance.  The dynamic character of the atmosphere is governed by a slow adjustment process that gives rise to wave motion over all scales.  \textbf{Accurate treatment of wave-like motion is of paramount importance to capturing departures from balance, and to ensure that the adjustment process is correct and free from spurious numerical errors} \cite{randall1994geostrophic, thuburn2005vertical}.
 
@@ -139,7 +139,7 @@ These errors are most pronounced near regions with the strongest topographic gra
 
 %This problem has significant implications for global atmospheric modeling, with efforts to tackle this problem stretching back as far as the late 1970s \cite{ZIJ1977BzPdA, DTMZIJ1986MAP}.  The typical solution to this problem is to apply a diffusive filter to topography data until the maximum slope fits within a specified tolerance and there is no sign of numerical noise associated with steep topography.  This approach has the obvious consequence of severely damaging the quality of the solution near topography, and leading to an effective grid resolution much coarser than the grid would allow.  Topographically driven precipitation, which is particularly important for estimating mountain snow-pack, is weakened substantially under this approach.  Further, atmospheric pressure blocking, which is responsible for stationary pressure systems and the development of heat waves / cold spells, is suppressed under topographical smoothing.
 
-This problem has significant implications for global atmospheric modeling, with efforts to tackle this problem stretching back as far as the late 1970s \cite{ZIJ1977BzPdA, DTMZIJ1986MAP}.  Other approaches that have attempted to address this problem include the use of cut-cells \cite{JSSHPAD2013GMDD}, coordinate surface smoothing \cite{JBK2011MWR}, reconstruction of pressure along horizontal coordinate surfaces \cite{GZ2012MWR}, or formulations which preserve consistency with the continuous operator \cite{SJL1997QJRMS}.  Unfortunately, none of these approaches are considered sufficiently robust, or provide sufficient improvement, to motivate wide acceptance.  Consequently, addressing these errors is one of the major outstanding problems in atmospheric modeling.
+This problem has significant implications for global atmospheric modeling, with efforts to tackle this problem stretching back as far as the late 1970s \cite{ZIJ1977BzPdA, DTMZIJ1986MAP}.  Other approaches that have attempted to address this problem include the use of cut-cells \cite{JSSHPAD2013GMDD}, coordinate surface smoothing \cite{JBK2011MWR}, reconstruction of pressure along horizontal coordinate surfaces \cite{GZ2012MWR}, or formulations which preserve consistency with the continuous operator \cite{SJL1997QJRMS}.  Unfortunately, none of these approaches are considered sufficiently robust, or provide sufficient improvement, to motivate wide acceptance.  Consequently, \textbf{addressing the errors from terrain-following coordinates is one of the major outstanding problems in atmospheric modeling.}
 
 %The pressure gradient problem arises for two reasons:  First, horizontal pressure gradients (which are computed along terrain-following surfaces) can be polluted by the effects of vertical stratification, which in turn drive unphysical horizontal velocities.  Second, current horizontal viscosity operators \cite{dennis2011cam} ignore stratification completely, leading to an unphysical diffusion of density and pressure along coordinate surfaces.  Both types of error can force the equations of motion at the grid-scale and, in conjunction with the stationary wave-modes exhibited by unstaggered schemes, can lead to stationary errors such as those seen in figure \ref{fig:OmegaNoise}.  In the context of high-order FEM, this proposal advocates removing the first type of errors by improving the accuracy of the coupling between the horizontal and vertical discrete pressure gradient operators.  The second type of error will be addressed via the development of a stratification-aware viscous operator.
 
@@ -193,42 +193,39 @@ This problem has significant implications for global atmospheric modeling, with 
 
 The non-hydrostatic equations that govern atmospheric circulation have been known for over a century, and a wide range of mature numerical methods are now available for numerical computation of their solutions.  Finite element methods (FEM), which include both the spectral element (SE) method and the discontinuous Galerkin (DG) method, have a long history in the field of computational fluid dynamics stretching back to the 1970s \cite{patera:84,maday1989spectral,FBSR1997JCP,BCCWS1998JCP,peraire11dg,wang_et_al13cfd}).  Recent advances in FEM \cite{huynh2007flux, ullrich2014global} also no longer impose the need for a conservative equation set when formulated with a DG discretization.  However, FEM have only recently been adopted by the atmospheric modeling community \cite{taylor:97,FXGJSHTW2002JCP,FXGTER2004MWR,AFMTJT2004MWR,NTL2005MWR,FXGMR2008JCP,JFKFXG2012JCP}.  The adoption of FEM in global atmospheric codes is motivated by their near-optimal parallel scalability on large-scale (petascale) parallel systems, and theoretical scalability on future exascale systems, unlike traditional global spectral and semi-Lagrangian methods.   Nodal FEM \cite{hesthaven2007nodal} further exhibit provably minimal bandwidth requirements (that is, they minimize the message size needed to convey information between neighboring elements), a property that can also be incorporated into the discretization of second-order terms using schemes such as the Compact DG (CDG) method \cite{peraire08cdg}.  Figure \ref{fig:CAMSEScalability} shows observed performance of three standard atmospheric dynamics solvers, including the global spectral method (EUL), regular latitude-longitude finite-volume method (FV) and spectral element model (SE).  Only the SE method exhibits near-perfect scalability down to one element per core (86400 cores).  FEM can also be formulated to have many desirable mathematical properties, including mass and energy conservation, high-order accuracy, and discrete preservation of the adjoint and annihilator properties of the gradient, divergence and curl operators.  Further, recent work on FEM has led to techniques for effective positivity and monotonicity filtering \cite{OGMATASC2013}.  Many other modeling groups are now working on adopting finite element methods as the basis for their dynamical cores, including the NUMA model of \cite{JFKFXG2012JCP}.  FEM are also likely candidates for adoption on the U.K. Met Office dynamical core and the upcoming model from the Korean Institute of Atmospheric Prediction Systems (KIAPS).
 
-\begin{figure}[t]
+\begin{figure}[p]
 \begin{center}
 \includegraphics[width=3.5in, clip=true, trim=0cm 1.7cm 0cm 1.7cm]{CAMSEScalability.png}
 \end{center}
 \caption{Simulated years per day (measuring performance) for three atmospheric dynamical cores at 28km global resolution on Intrepid (IBM BG/P), including the global spectral model (EUL), regular latitude-longitude finite-volume model (FV) and the hydrostatic spectral element model (SE) when run in conjunction with 28km land model and 11km sea ice and data ocean.  Near perfect scalability is observed for the SE model down to one element per core (86400 cores).  Reproduced from \cite{dennis2011cam}.} \label{fig:CAMSEScalability}
 \end{figure}
 
-\subsubsection{Staggered Nodal Finite Element Methods} \label{sec:SNFEM}
-
-Staggered methods, as defined in this proposal, are a class of discretizations where scalar (density, pressure and tracer density) and velocity degrees of freedom are stored at different spatial locations \cite{AAVRL1977GCM}.  These methods have long been used for both horizontal discretizations in atmospheric models \cite{lin2004vertically, putman2009finite, skamarock2005wrf, skamarock2012mpas, thuburn2009numerical} and vertical discretizations \cite{arakawa1988baroclinic, charney1953numerical}.  These methods further have excellent dispersive properties and do not support stationary (zero phase speed) $2 \Delta x$ modes \cite{randall1994geostrophic, thuburn2005vertical, ullrich2014understanding}, which are notorious for polluting atmospheric models.  However, these methods have never been operationally employed above second-order accuracy.  Alongside the rise of finite element methods for atmospheric modeling, there has been a renewed interest in pursuing staggered finite element methods \cite{boffi2009some, cotter2009mixed, cotter2011numerical, cotter2012mixed, staniforth2013analysis} analogous to the mixed-finite element methods employed for elliptic problems \cite{PRJT1977MAFEM}.  Note that this definition of staggering differs from the staggered grid multi-domain method \cite{kopriva1996conservative}, where solution points and flux points are staggered.
-
-\begin{figure}[t]
+\begin{figure}[p]
 \begin{center}
 \includegraphics[width=3in]{SEStaggered}
 \end{center}
-\caption{An example 3rd order horizontal staggering of 1D velocity (u) and height (h) state variables for a SE/DG SNFEM for the shallow water equations.  Here $u$ nodes are placed at Gauss-Lobatto quadrature points and $h$ nodes are placed at Gaussian quadrature points.  The superscript denotes the element number and the subscript denotes the sub-grid-scale index..} \label{fig:SNFEM}
+\caption{An example 3rd order horizontal staggering of 1D velocity (u) and height (h) state variables for a continuous/discontinuous SNFEM for the linear wave equation.  Here $u$ nodes are placed at Gauss-Lobatto quadrature points and $h$ nodes are placed at Gaussian quadrature points.  The superscript denotes the element number and the subscript denotes the sub-grid-scale index.} \label{fig:SNFEM}
 \end{figure}
 
-\begin{figure}[t]
+\begin{figure}[p]
 \begin{center}
-\includegraphics[width=2.5in]{NodalArrangement}
+\includegraphics[width=2.5in]{NodalArrangement-Left.png}
+\includegraphics[width=2.5in]{NodalArrangement-Right.png}
 \end{center}
 \caption{Four options for the placement of scalar ($\times$) and velocity variables (arrows): (a) nodal discontinuous Galerkin, (b) nodal Spectral Element, (c) C-grid SNFEM, (d) B-grid SNFEM..} \label{fig:NodalArrangement}
 \end{figure}
 
-This proposal explores \textbf{staggered nodal finite element methods (SNFEM)}, which are an extension of nodal finite element methods that store scalar and velocity degrees of freedom at nodal points.  SNFEM are formulated using differential operators on Gauss-Legendre (GL) and Gauss-Lobatto-Legendre (GLL) nodes using an analogue to the flux reconstruction methods of \cite{huynh2007flux}, as described in \cite{ullrich2014global}.  An example nodal staggering for a 3rd order 1D hybrid SE/DG method is depicted in Figure \ref{fig:SNFEM}.  Four possible arrangements of prognostic variables are depicted in Figure \ref{fig:NodalArrangement} for a 2D SNFEM.  
+\subsubsection{Staggered Nodal Finite Element Methods (SNFEMs)} \label{sec:SNFEM}
 
-Under this formulation, a continuous extension of the nodal discretization is constructed via polynomial fit through all nodal points associated with a particular variable within an element (either GL nodes or GLL nodes).  Derivatives of the polynomial fits are then used for computing the spatial discretization (at either GL or GLL nodes), augmented (when a discontinuity exists in the reconstruction at element edges) by the derivative operator that arises from  the flux reconstruction formulation.  Continuity is optionally enforced via direct stiffness summation \cite{ronquist1987spectral}.  This differential treatment can be shown to be identical to a corresponding \textit{variational} or \textit{Galerkin} treatment with appropriate choice of flux correction function.
+Staggered methods, as defined in this proposal, are a class of discretizations where scalar (density, pressure and tracer density) and velocity degrees of freedom are stored at different spatial locations \cite{AAVRL1977GCM}.  These methods have long been used for both horizontal discretizations in atmospheric models \cite{lin2004vertically, putman2009finite, skamarock2005wrf, skamarock2012mpas, thuburn2009numerical} and vertical discretizations \cite{arakawa1988baroclinic, charney1953numerical}.  These methods further have excellent dispersive properties and do not support stationary (zero phase speed) $2 \Delta x$ modes \cite{randall1994geostrophic, thuburn2005vertical, ullrich2014understanding}, which are notorious for polluting atmospheric models.  However, these methods have never been operationally employed above second-order accuracy.  Alongside the rise of finite element methods for atmospheric modeling, there has been a renewed interest in pursuing staggered finite element methods \cite{boffi2009some, cotter2009mixed, cotter2011numerical, cotter2012mixed, staniforth2013analysis} analogous to the mixed-finite element methods employed for elliptic problems \cite{PRJT1977MAFEM}.  Note that this definition of staggering differs from the staggered grid multi-domain method \cite{kopriva1996conservative}, where solution points and flux points are staggered.
 
-The \textbf{central motivation} for the use of SNFEM is their \textbf{significantly improved treatment of wave-like phenomena}, which are in-turn key for modeling atmospheric fluids (see section \ref{sec:UniqueAtmosphere}).  This improvement can be clearly seen in the phase speed at almost all wavelengths (see Figure \ref{fig:SNFEMEigenstructure}) when compared to spectral element and staggered finite volume methods (both of which are known to have excellent dispersive properties).  At long wavelengths the use of staggering provides approximately double the horizontal resolution without added degrees of freedom.  At short wavelengths, staggering also eliminates the stationary $2 \Delta x$ mode which is present in all unstaggered discretizations \cite{melvin2012dispersion, ullrich2014understanding}.
+This proposal explores \textbf{staggered nodal finite element methods (SNFEMs)}, which are a class of arbitrary order-of-accuracy methods that extend traditional nodal finite element methods (NFEMs) by storing scalar and velocity degrees of freedom at differential spatial locations.  An example nodal staggering for a 3rd order 1D hybrid SE/DG method is depicted in Figure \ref{fig:SNFEM}, where velocity is stored at Gauss-Lobatto (GL) nodes and height is stored at Gauss nodes.  Four possible arrangements of prognostic variables are depicted in Figure \ref{fig:NodalArrangement} for a 2D SNFEM.
+
+Discrete evolution equations for the staggered variables are constructed using an approach that is similar to the flux reconstruction methods of \cite{huynh2007flux}, as described in \cite{ullrich2014global} for non-conservative systems.  Under this formulation, a continuous analogue of the nodal discretization is constructed within an element via polynomial fit through the nodal points associated with a particular variable.  Values and derivatives of the polynomial fits are then evaluated where necessary, augmented (when a discontinuity exists in the reconstruction at element edges) by the derivative operator that arises from the flux reconstruction formulation.  Continuity is optionally enforced via direct stiffness summation \cite{ronquist1987spectral}.  This differential treatment can be shown to be identical to a corresponding \textit{variational} or \textit{Galerkin} treatment with appropriate choice of flux correction function.
+
+The \textbf{central motivation} for the use of SNFEM is their \textbf{significantly improved treatment of wave-like phenomena}, which are in-turn key for modeling atmospheric fluids (see section \ref{sec:AccurateWaves}).  This improvement can be clearly seen in the phase speed at almost all wavelengths (see Figure \ref{fig:SNFEMEigenstructure}) when compared to spectral element and staggered finite volume methods (both of which are known to have excellent dispersive properties).  At long wavelengths the use of staggering provides approximately double the horizontal resolution without added degrees of freedom.  At short wavelengths, staggering also eliminates the stationary $2 \Delta x$ mode which is present in all unstaggered discretizations \cite{melvin2012dispersion, ullrich2014understanding}.
 
 The improved phase treatment is immediately evident when simulating wave-like motion:  Figure \ref{fig:SimulatedBell} shows a simulation of the 1D linear wave equation using both an unstaggered spectral element discretization and SNFEM discretization operating on a localized Gaussian pulse.  Both simulations use the same number of degrees of freedom and order-of-accuracy.  Spurious high-wavenumber waves are greatly reduced in the SNFEM simulation and the amplitude of the resultant pulse is more accurately captured (the exact solution has magnitude $0.5$).  This result further suggests that the SNFEM model will require \textbf{less artificial numerical diffusion} than a corresponding unstaggered discretization.  Further, due to the non-stationary of high-frequency modes, we expect that the \textbf{dynamical response to topographic forcing} (and forcing from sub-grid-scale parameterizations) at high frequencies will be greatly improved (see Figure \ref{fig:OmegaNoise}). 
-
-Further, note that since SNFEM are inherently non-diffusive, optimal time step size can be attained using a family of well-known optimal time integrators \cite{kinnmark1984one}.  Several stabilization mechanisms will be studied as part of this proposal, including hyperviscosity \cite{guba2014viscosity, ullrich2014global}, stratification-aware upwinding and a variational multi-scale formulation.
-
-The development of a high-order SNFEM vertical coordinate also has the potential for greatly reducing errors related to pressure gradient errors:  This proposal advocates removing pressure gradient errors by improving the accuracy of the coupling between the horizontal and vertical discrete pressure gradient operators.  Preliminary results suggest that improving the vertical order-of-accuracy from two to four can lead to errors that are about two orders of magnitude smaller.  Errors related to horizontal viscosity will be addressed via the development of a stratification-aware viscous operator.
 
 \begin{figure}
 \begin{center}
@@ -239,11 +236,15 @@ The development of a high-order SNFEM vertical coordinate also has the potential
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=3in]{SimulatedBell_SE}
-\includegraphics[width=3in]{SimulatedBell_SNFEM}
+\includegraphics[width=3.2in]{SimulatedBell_SE}
+\includegraphics[width=3.2in]{SimulatedBell_SNFEM}
 \end{center}
 \caption{A sharp Gaussian bell of height $1$ is simulated until $t = 0.4$ under the 1D wave equation using (a) the fourth-order spectral element method and (b) a fourth-order SNFEM formulation.  Initial conditions are shown with red dashed line.  Although both schemes use the same number of degrees of freedom and are energy conservative, the improved phase properties of SNFEM reduce short-wavelength noise in the solution and more closely capture the height of the bell (exact maximum $0.5$).}  \label{fig:SimulatedBell}
 \end{figure}
+
+Further, note that since SNFEM are inherently non-diffusive, optimal time step size can be attained using a family of well-known optimal time integrators \cite{kinnmark1984one}.  Several stabilization mechanisms will be studied as part of this proposal, including hyperviscosity \cite{guba2014viscosity, ullrich2014global}, stratification-aware upwinding and a variational multi-scale formulation.
+
+The development of a high-order SNFEM vertical coordinate also has the potential for greatly reducing errors related to pressure gradient errors:  This proposal advocates removing pressure gradient errors by improving the accuracy of the coupling between the horizontal and vertical discrete pressure gradient operators.  Preliminary results suggest that improving the vertical order-of-accuracy from two to four can lead to errors that are about two orders of magnitude smaller.  Errors related to horizontal viscosity will be addressed via the development of a stratification-aware viscous operator.
 
 %\subsubsection{Justification of Hypotheses}
 
@@ -288,12 +289,12 @@ This proposal will \textbf{build a static and adaptive mesh refinement capabilit
 
 The goal of this proposal is the development of a next-generation non-hydrostatic atmospheric modeling environment using a horizontally-explicit and vertically-implicit formulation (sec. \ref{sec:UniqueAtmosphere}) that addresses observed problems with terrain-following coordinates (sec. \ref{sec:TopographyPGF}), exhibits optimal scalability on large-scale parallel systems (sec. \ref{sec:FEM}), uses staggering to recover nearly optimal treatment of atmospheric waves (sec. \ref{sec:SNFEM}), and supports static and adaptive mesh refinement (sec. \ref{sec:Refinement}).
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=6in]{UMJSTest-Results}
-\end{center}
-\caption{A developing non-hydrostatic baroclinic instability simulated in the Tempest framework.  Relative vorticity shown.} \label{fig:TempestBaroclinicInstability}
-\end{figure}
+%\begin{figure}[t]
+%\begin{center}
+%\includegraphics[width=6in]{UMJSTest-Results}
+%\end{center}
+%\caption{A developing non-hydrostatic baroclinic instability simulated in the Tempest framework.  Relative vorticity shown.} \label{fig:TempestBaroclinicInstability}
+%\end{figure}
 
 This proposal will use the Tempest framework \cite{ullrich2014global} as a starting point for research tasks T2-T5.  Tempest is a numerical framework (\url{https://github.com/paullric/tempestmodel}) \cite{ullrich2014global} for solving partial differential equations in block-structured geometry implemented in C++ and parallelized using MPI.  The framework has been built by PI Ullrich to improve the ease of experimentation and inter comparison of numerical discretizations, particularly for applications in geophysical fluid dynamics.  The model currently supports a number of (unstaggered) nodal finite-element methods including discontinuous Galerkin (DG) \cite{cockburn2000development}, spectral element (SE) \cite{maday1989spectral} and flux reconstruction (FR) \cite{huynh2007flux}.  Several second-, third- and fourth-order implicit-explicit time integrators (see section \ref{sec:UniqueAtmosphere}) have been implemented for all spatial discretizations.  The model supports both limited-area (Cartesian) domains and global (spherical) domains, via the cubed-sphere grid (see Fig. \ref{fig:CubedSphere}).  Strong scaling tests have been performed on the NERSC Edison supercomputer and optimal scalability up to 24k processor cores was observed.  Work is currently underway to integrate Tempest into the Community Earth System Model \cite{JWHetal2013BAMS} as a next-generation atmospheric dynamical core.
 
@@ -320,9 +321,9 @@ This proposal will undertake a thorough \textbf{dispersion analysis of SNFEM}, w
 
 \begin{figure}[t]
 \begin{center}
-\includegraphics[width=6.5in]{ModifiedBasisMethod}
+\includegraphics[width=6.5in, clip=true, trim=0cm 1.6cm 0cm 0.7cm]{ModifiedBasisMethod}
 \end{center}
-\caption{(a) Dispersion relation for the unmodified SE method of order 5 showing a spectral gap and (b) Dispersion relation for the SE method using a modified basis where the spectral gap has been removed.  The exact phase speed is $c_p = 1$.} \label{fig:SEMDispersionGap}
+\caption{(a) Dispersion relation for the unmodified SE method of order 5 showing a spectral gap and (b) Dispersion relation for the SE method using a modified basis where the spectral gap has been removed.  The horizontal axis gives wavelength in terms of average spacing between nodes $dx$.  The exact phase speed is $c_p = 1$.} \label{fig:SEMDispersionGap}
 \end{figure}
 
 \vspace{-0.4cm}
